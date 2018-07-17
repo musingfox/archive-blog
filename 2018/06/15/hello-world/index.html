@@ -1,0 +1,507 @@
+
+<!DOCTYPE html>
+<html lang="zh-tw">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Musingfox Note">
+    <title>開張大吉 - Musingfox Note</title>
+    <meta name="author" content="Nick Huang(musingfox)">
+    
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Nick Huang(musingfox)","sameAs":["https://github.com/musingfox","https://www.linkedin.com/profile/"],"image":"https://www.gravatar.com/avatar/2fe867b1e6bcb804064f4cadb7f84c99"},"articleBody":"\n網站怎麼弄的這是一個叫做Hexo的靜態網頁框架，用node.js建立，特色是部屬快速方便，也有很多的外掛，可以做很多的個人化。\n我會用這個框架的幾個原因\n\n操作簡單，從建立到部署只有幾個指令\n可以用markdown語法\n有許多主題可以使用，也可以依自己需要做修改\n直接deploy上github page，不用煩惱server\n據說是台灣人做的\n\n除了Hexo之外，還有很多類似的框架，例如Logdown、jekyll、ghost。\n我自己另外用ghost建立了一個個人的網站用來記錄廢文\nHexo的好處剛剛提過markdown，programmer應該都有用過，這是一個讓你輕鬆編輯文件並且可以轉成漂亮的格式\nmarkdown寫起來容易也好讀，也可以產生出有系統又漂亮的文件方便閱讀\n除此之外，Hexo提供好用的plugin讓你可以直接把local建立好的網站直接丟上github page\n不用自己去架伺服器，輕輕鬆鬆就可以完成\n目前做了什麼目前使用tranquilpeak這個主題\n裡面已經內建很多功能，未來會在看看有沒有其他有趣的東西可以做\n可能會先寫一些自己架網站的過程，或是自己最近研究的內容\n歡迎大家用底下的gitment留言，只要有github帳號就可以留言了！","dateCreated":"2018-06-15T18:42:04+08:00","dateModified":"2018-07-17T17:29:59+08:00","datePublished":"2018-06-15T18:42:04+08:00","description":"拖了很久才弄好這個雛形，基本上會用這個地方來寫自己工作上的筆記或是研究，也會記錄一些自己開發的小東西。","headline":"開張大吉","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"/note.musingfox.me/2018/06/15/hello-world/"},"publisher":{"@type":"Organization","name":"Nick Huang(musingfox)","sameAs":["https://github.com/musingfox","https://www.linkedin.com/profile/"],"image":"https://www.gravatar.com/avatar/2fe867b1e6bcb804064f4cadb7f84c99","logo":{"@type":"ImageObject","url":"https://www.gravatar.com/avatar/2fe867b1e6bcb804064f4cadb7f84c99"}},"url":"/note.musingfox.me/2018/06/15/hello-world/"}</script>
+    <meta name="description" content="拖了很久才弄好這個雛形，基本上會用這個地方來寫自己工作上的筆記或是研究，也會記錄一些自己開發的小東西。">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="開張大吉">
+<meta property="og:url" content="note.musingfox.me/2018/06/15/hello-world/index.html">
+<meta property="og:site_name" content="Musingfox Note">
+<meta property="og:description" content="拖了很久才弄好這個雛形，基本上會用這個地方來寫自己工作上的筆記或是研究，也會記錄一些自己開發的小東西。">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:updated_time" content="2018-07-17T09:29:59.432Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="開張大吉">
+<meta name="twitter:description" content="拖了很久才弄好這個雛形，基本上會用這個地方來寫自己工作上的筆記或是研究，也會記錄一些自己開發的小東西。">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-1udptkpril81ozu8ifd8zpujn7ipu7lefxsiu5gxx0dpnzntdx6dusvki3ao.min.css">
+    <!--STYLES END-->
+    
+
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="5">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">Musingfox Note</a>
+    </div>
+    
+        
+            <a  class="header-right-picture "
+                href="#about">
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="5">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                            title="首頁"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首頁</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-categories"
+                            
+                            title="分類"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分類</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                            title="標籤"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">標籤</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                            title="所有文章"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">所有文章</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link open-algolia-search"
+                             href="#search"
+                            
+                            title="搜尋"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">搜尋</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="#about"
+                            
+                            title="關於"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-user" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">關於</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://github.com/musingfox" target="_blank" rel="noopener" title="github">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">github</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://www.linkedin.com/profile/" target="_blank" rel="noopener" title="linkedin">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">linkedin</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="5"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            開張大吉
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2018-06-15T18:42:04+08:00">
+	
+		    6月 15, 2018
+    	
+    </time>
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <!-- excerpt -->
+<h2 id="網站怎麼弄的"><a href="#網站怎麼弄的" class="headerlink" title="網站怎麼弄的"></a>網站怎麼弄的</h2><p>這是一個叫做<a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>的靜態網頁框架，用node.js建立，特色是部屬快速方便，也有很多的外掛，可以做很多的個人化。</p>
+<p>我會用這個框架的幾個原因</p>
+<ul>
+<li>操作簡單，從建立到部署只有幾個指令</li>
+<li>可以用markdown語法</li>
+<li>有許多主題可以使用，也可以依自己需要做修改</li>
+<li>直接deploy上github page，不用煩惱server</li>
+<li>據說是台灣人做的</li>
+</ul>
+<p>除了Hexo之外，還有很多類似的框架，例如Logdown、jekyll、ghost。</p>
+<p>我自己另外用ghost建立了一個個人的網站<del>用來記錄廢文</del></p>
+<h2 id="Hexo的好處"><a href="#Hexo的好處" class="headerlink" title="Hexo的好處"></a>Hexo的好處</h2><p>剛剛提過markdown，programmer應該都有用過，這是一個讓你輕鬆編輯文件並且可以轉成漂亮的格式</p>
+<p>markdown寫起來容易也好讀，也可以產生出有系統又漂亮的文件方便閱讀</p>
+<p>除此之外，Hexo提供好用的plugin讓你可以直接把local建立好的網站直接丟上github page</p>
+<p>不用自己去架伺服器，輕輕鬆鬆就可以完成</p>
+<h2 id="目前做了什麼"><a href="#目前做了什麼" class="headerlink" title="目前做了什麼"></a>目前做了什麼</h2><p>目前使用<a href="https://github.com/LouisBarranqueiro/hexo-theme-tranquilpeak" target="_blank" rel="noopener">tranquilpeak</a>這個主題</p>
+<p>裡面已經內建很多功能，未來會在看看有沒有其他有趣的東西可以做</p>
+<p>可能會先寫一些自己架網站的過程，或是自己最近研究的內容</p>
+<p>歡迎大家用底下的gitment留言，只要有github帳號就可以留言了！</p>
+            
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Diesen Beitrag teilen">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=note.musingfox.me/2018/06/15/hello-world/" title="分享到 Facebook">
+                    <i class="fa fa-facebook-official" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=note.musingfox.me/2018/06/15/hello-world/" title="分享到 Twitter">
+                    <i class="fa fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=note.musingfox.me/2018/06/15/hello-world/" title="分享到 Google+">
+                    <i class="fa fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a class="post-action-btn btn btn--default" href="#gitment">
+                         <i class="fa fa-comment-o"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <div id="gitment"></div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2018 Nick Huang(musingfox). All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Diesen Beitrag teilen">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=note.musingfox.me/2018/06/15/hello-world/" title="分享到 Facebook">
+                    <i class="fa fa-facebook-official" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=note.musingfox.me/2018/06/15/hello-world/" title="分享到 Twitter">
+                    <i class="fa fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=note.musingfox.me/2018/06/15/hello-world/" title="分享到 Google+">
+                    <i class="fa fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a class="post-action-btn btn btn--default" href="#gitment">
+                         <i class="fa fa-comment-o"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+    <i id="btn-close-shareoptions" class="fa fa-close"></i>
+    <ul class="share-options">
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=note.musingfox.me/2018/06/15/hello-world/">
+                    <i class="fa fa-facebook-official" aria-hidden="true"></i><span>分享到 Facebook</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=note.musingfox.me/2018/06/15/hello-world/">
+                    <i class="fa fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=note.musingfox.me/2018/06/15/hello-world/">
+                    <i class="fa fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <h4 id="about-card-name">Nick Huang(musingfox)</h4>
+        
+            <div id="about-card-bio"><p>交大資工106級資工組畢業<br>目前是小小後端同時四處摸索<br>php/javascript/python 正在學go<br><a href='https://blog.musingfox.me'>這是我的生活日常<a/></p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>後端工程師</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br/>
+                Taipei/Taiwan
+            </div>
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-yhuo2grt8r7qkqumzgjoglkfbicl1thukjgmla6jopu56zpcowfedi5zjcor.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script type="text/javascript">
+            (function() {
+                function render() {
+                    new Gitment({
+                        id: 'note.musingfox.me/2018/06/15/hello-world/',
+                        owner: 'musingfox',
+                        repo: 'https://github.com/musingfox/musingfox.github.io',
+                        oauth: {
+                            client_id: 'cd55fef5e85a08fb49da',
+                            client_secret: '5a6f07ad8c1e1a8d2074df43feab2fd5c3d4bebc',
+                        }
+                    }).render('gitment');
+                }
+                var gc = document.createElement('script');
+                gc.type = 'text/javascript';
+                gc.src = '//imsun.github.io/gitment/dist/gitment.browser.js';
+                gc.charset = 'UTF-8';
+                gc.onload = render;
+                gc.async = true;
+                document.querySelector('body').appendChild(gc);
+                var gcs = document.createElement('link');
+                gcs.href = '//imsun.github.io/gitment/style/default.css';
+                gcs.type = 'text/css';
+                gcs.rel = 'stylesheet';
+                gcs.media = 'screen,print';
+                document.querySelector('head').appendChild(gcs);
+            })();
+	    </script>
+    
+
+
+
+    </body>
+</html>
