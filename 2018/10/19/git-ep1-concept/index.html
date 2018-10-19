@@ -6,24 +6,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="Musingfox Note">
-    <title>開張大吉 - Musingfox Note</title>
+    <title>RE:從零開始的git 概念篇 - Musingfox Note</title>
     <meta name="author" content="Nick Huang(musingfox)">
     
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Nick Huang(musingfox)","sameAs":["https://github.com/musingfox","https://www.linkedin.com/profile/"],"image":"https://www.gravatar.com/avatar/2fe867b1e6bcb804064f4cadb7f84c99"},"articleBody":"\n首先先解釋git的概念\nTreegit把code的變化以類似tree的方式呈現，每當我們要產生新的紀錄時，就會在tree上面加上新的節點(commit)，也可以在節點上開分支(branch)\n示意圖：\n1234567graph LR;A--&gt;B;B--&gt;C;B--&gt;F;C--&gt;D;D--&gt;E;\n每個節點都是一個commit，可以看到B點的時候產生了兩個分支，分支之間可以彼此切換，後面還會再提到分支之間的互動，接下來要說的是git怎麼紀錄檔案變化\nStatesgit中把檔案的狀態分成三個states\n\nmodified working directory\nstaged staging area\ncommited git directory\n\nmodified代表你對這個檔案做了改動，git會比較現在的內容跟原本內容，有改動的檔案就會被視為modified，變動後的檔案我們可以將它放進staging area，檔案會變成staged的狀態，通常這代表我們確認這部分的修改沒問題，但還沒結束，我們必須將staged的檔案commit，才會放入git directory中，也就是在tree裡面加入新的節點\n\n開發時的流程會是：\n\n修改完檔案後儲存，git偵測到檔案變動，將檔案視為modified\n將檔案放入staging area中 git add file\n將staged file commit git commit\n\ncommit的時候，git會要你寫入message讓你之後方便尋找\nBranch前面提過git像是一個tree，上面有很多的節點，既然是tree，當然應該要有分支，而在git中，我們可以在節點上開新的branch，代表我們可以在同樣的基礎下開發不同版本的code或是同時開發不同的功能。\n通常我們會有一個master branch，所以通常我們會在master上開分支進行開發，當開發完之後，我們可以把分支接回(merge)原本的master branch，merge之後的圖會像下面這樣\n12345678graph LR;A--&gt;B;B--&gt;C;C--&gt;D;D--&gt;E;B--&gt;F;F--&gt;E;E--&gt;G;\n要注意的是，開發過程中可能會有改了同樣的檔案，但是內容不相同的狀況，這時候要merge就會產生衝突(conflict)，發生conflict的時候merge會無法進行，merge的人必須要先把衝突解決才能merge\nDistributed有了git的基本概念，現在可以說一下git的應用狀況\n首先，git讓我們可以為自己的程式改動留下紀錄，同時開發不同的功能後結合在一起。git並不只是為了個人使用，它能夠讓開發者間可以同時開發。最重要的是，git是一套分散式的版本控制系統。\n早期的版本控制系統是集中式的，集中式的特色是開發者間的檔案是同步的，也就是當某個人做改動時，其他人的檔案也會有更動，但這也代表我們必須保持在連接網路的狀態才能同步，也就是當我們寫完一部份想要commit的時候會卡住，沒辦法進行接下來的開發。\n分散式的好處在於，每個人都有一份自己的檔案庫，代表你不用連網也可以發出commit，任意的修改你local端的程式，我們需要的只是一個雲端的檔案庫，大家都可以從這邊複製(clone)一份下來，然後進行開發，開發完之後我們可以push上雲端讓大家使用，也可以pull下來更新自己local的檔案庫。\n分散式讓我們可以不被綁在需要聯網同步檔案庫的困境，我們只要clone之後開始開發，然後透過pull跟push共享彼此的開發成果。\n總結git讓開發者可以方便的共享檔案庫，更有效率地做開發，下一篇再來講git實際使用的方式","dateCreated":"2018-10-19T17:27:24+08:00","dateModified":"2018-10-19T17:28:08+08:00","datePublished":"2018-10-19T17:27:24+08:00","description":"前言相信大家都有過類似的經驗\n\ncode修改後覺得本來的版本比較好\n共同開發後要把內容整理起來\n想知道自己之前程式裡的邏輯跟現在的差別\n\n因為以上總總的問題，產生了版本控制這個概念，我們可以靠著版本控制去追code的變化，目前最多人使用的就是git","headline":"開張大吉","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"/note.musingfox.me/2018/10/19/git-ep1-concept/"},"publisher":{"@type":"Organization","name":"Nick Huang(musingfox)","sameAs":["https://github.com/musingfox","https://www.linkedin.com/profile/"],"image":"https://www.gravatar.com/avatar/2fe867b1e6bcb804064f4cadb7f84c99","logo":{"@type":"ImageObject","url":"https://www.gravatar.com/avatar/2fe867b1e6bcb804064f4cadb7f84c99"}},"url":"/note.musingfox.me/2018/10/19/git-ep1-concept/","keywords":"git, junior"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Nick Huang(musingfox)","sameAs":["https://github.com/musingfox","https://www.linkedin.com/profile/"],"image":"https://www.gravatar.com/avatar/2fe867b1e6bcb804064f4cadb7f84c99"},"articleBody":"\n首先先解釋git的概念\nTreegit把code的變化以類似tree的方式呈現，每當我們要產生新的紀錄時，就會在tree上面加上新的節點(commit)，也可以在節點上開分支(branch)\n示意圖：\n1234567graph LR;A--&gt;B;B--&gt;C;B--&gt;F;C--&gt;D;D--&gt;E;\n每個節點都是一個commit，可以看到B點的時候產生了兩個分支，分支之間可以彼此切換，後面還會再提到分支之間的互動，接下來要說的是git怎麼紀錄檔案變化\nStatesgit中把檔案的狀態分成三個states\n\nmodified working directory\nstaged staging area\ncommited git directory\n\nmodified代表你對這個檔案做了改動，git會比較現在的內容跟原本內容，有改動的檔案就會被視為modified，變動後的檔案我們可以將它放進staging area，檔案會變成staged的狀態，通常這代表我們確認這部分的修改沒問題，但還沒結束，我們必須將staged的檔案commit，才會放入git directory中，也就是在tree裡面加入新的節點\n\n開發時的流程會是：\n\n修改完檔案後儲存，git偵測到檔案變動，將檔案視為modified\n將檔案放入staging area中 git add file\n將staged file commit git commit\n\ncommit的時候，git會要你寫入message讓你之後方便尋找\nBranch前面提過git像是一個tree，上面有很多的節點，既然是tree，當然應該要有分支，而在git中，我們可以在節點上開新的branch，代表我們可以在同樣的基礎下開發不同版本的code或是同時開發不同的功能。\n通常我們會有一個master branch，所以通常我們會在master上開分支進行開發，當開發完之後，我們可以把分支接回(merge)原本的master branch，merge之後的圖會像下面這樣\n12345678graph LR;A--&gt;B;B--&gt;C;C--&gt;D;D--&gt;E;B--&gt;F;F--&gt;E;E--&gt;G;\n要注意的是，開發過程中可能會有改了同樣的檔案，但是內容不相同的狀況，這時候要merge就會產生衝突(conflict)，發生conflict的時候merge會無法進行，merge的人必須要先把衝突解決才能merge\nDistributed有了git的基本概念，現在可以說一下git的應用狀況\n首先，git讓我們可以為自己的程式改動留下紀錄，同時開發不同的功能後結合在一起。git並不只是為了個人使用，它能夠讓開發者間可以同時開發。最重要的是，git是一套分散式的版本控制系統。\n早期的版本控制系統是集中式的，集中式的特色是開發者間的檔案是同步的，也就是當某個人做改動時，其他人的檔案也會有更動，但這也代表我們必須保持在連接網路的狀態才能同步，也就是當我們寫完一部份想要commit的時候會卡住，沒辦法進行接下來的開發。\n分散式的好處在於，每個人都有一份自己的檔案庫，代表你不用連網也可以發出commit，任意的修改你local端的程式，我們需要的只是一個雲端的檔案庫，大家都可以從這邊複製(clone)一份下來，然後進行開發，開發完之後我們可以push上雲端讓大家使用，也可以pull下來更新自己local的檔案庫。\n分散式讓我們可以不被綁在需要聯網同步檔案庫的困境，我們只要clone之後開始開發，然後透過pull跟push共享彼此的開發成果。\n總結git讓開發者可以方便的共享檔案庫，更有效率地做開發，下一篇再來講git實際使用的方式","dateCreated":"2018-10-19T17:27:24+08:00","dateModified":"2018-10-19T17:29:43+08:00","datePublished":"2018-10-19T17:27:24+08:00","description":"前言相信大家都有過類似的經驗\n\ncode修改後覺得本來的版本比較好\n共同開發後要把內容整理起來\n想知道自己之前程式裡的邏輯跟現在的差別\n\n因為以上總總的問題，產生了版本控制這個概念，我們可以靠著版本控制去追code的變化，目前最多人使用的就是git","headline":"RE:從零開始的git 概念篇","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"/note.musingfox.me/2018/10/19/git-ep1-concept/"},"publisher":{"@type":"Organization","name":"Nick Huang(musingfox)","sameAs":["https://github.com/musingfox","https://www.linkedin.com/profile/"],"image":"https://www.gravatar.com/avatar/2fe867b1e6bcb804064f4cadb7f84c99","logo":{"@type":"ImageObject","url":"https://www.gravatar.com/avatar/2fe867b1e6bcb804064f4cadb7f84c99"}},"url":"/note.musingfox.me/2018/10/19/git-ep1-concept/","keywords":"git, junior"}</script>
     <meta name="description" content="前言相信大家都有過類似的經驗  code修改後覺得本來的版本比較好 共同開發後要把內容整理起來 想知道自己之前程式裡的邏輯跟現在的差別  因為以上總總的問題，產生了版本控制這個概念，我們可以靠著版本控制去追code的變化，目前最多人使用的就是git">
 <meta name="keywords" content="git, junior">
 <meta property="og:type" content="blog">
-<meta property="og:title" content="開張大吉">
+<meta property="og:title" content="RE:從零開始的git 概念篇">
 <meta property="og:url" content="note.musingfox.me/2018/10/19/git-ep1-concept/index.html">
 <meta property="og:site_name" content="Musingfox Note">
 <meta property="og:description" content="前言相信大家都有過類似的經驗  code修改後覺得本來的版本比較好 共同開發後要把內容整理起來 想知道自己之前程式裡的邏輯跟現在的差別  因為以上總總的問題，產生了版本控制這個概念，我們可以靠著版本控制去追code的變化，目前最多人使用的就是git">
 <meta property="og:locale" content="zh-tw">
 <meta property="og:image" content="https://git-scm.com/book/en/v2/images/areas.png">
-<meta property="og:updated_time" content="2018-10-19T09:28:08.667Z">
+<meta property="og:updated_time" content="2018-10-19T09:29:43.624Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="開張大吉">
+<meta name="twitter:title" content="RE:從零開始的git 概念篇">
 <meta name="twitter:description" content="前言相信大家都有過類似的經驗  code修改後覺得本來的版本比較好 共同開發後要把內容整理起來 想知道自己之前程式裡的邏輯跟現在的差別  因為以上總總的問題，產生了版本控制這個概念，我們可以靠著版本控制去追code的變化，目前最多人使用的就是git">
 <meta name="twitter:image" content="https://git-scm.com/book/en/v2/images/areas.png">
     
@@ -190,7 +190,7 @@
         <div class="post-header main-content-wrap text-left">
     
         <h1 class="post-title">
-            開張大吉
+            RE:從零開始的git 概念篇
         </h1>
     
     
@@ -278,7 +278,7 @@
     </nav>
     <ul class="post-actions post-action-share">
         <li class="post-action hide-lg hide-md hide-sm">
-            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Diesen Beitrag teilen">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
         </li>
@@ -318,7 +318,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -371,7 +371,7 @@
     </nav>
     <ul class="post-actions post-action-share">
         <li class="post-action hide-lg hide-md hide-sm">
-            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Diesen Beitrag teilen">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
         </li>
@@ -411,7 +411,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
