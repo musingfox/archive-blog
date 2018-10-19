@@ -1,0 +1,522 @@
+
+<!DOCTYPE html>
+<html lang="zh-tw">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Musingfox Note">
+    <title> - Musingfox Note</title>
+    <meta name="author" content="Nick Huang(musingfox)">
+    
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Nick Huang(musingfox)","sameAs":["https://github.com/musingfox","https://www.linkedin.com/profile/"],"image":"https://www.gravatar.com/avatar/2fe867b1e6bcb804064f4cadb7f84c99"},"articleBody":"\n首先先解釋git的概念\nTreegit把code的變化以類似tree的方式呈現，每當我們要產生新的紀錄時，就會在tree上面加上新的節點(commit)，也可以在節點上開分支(branch)\n示意圖：\n1234567graph LR;A--&gt;B;B--&gt;C;B--&gt;F;C--&gt;D;D--&gt;E;\n每個節點都是一個commit，可以看到B點的時候產生了兩個分支，分支之間可以彼此切換，後面還會再提到分支之間的互動，接下來要說的是git怎麼紀錄檔案變化\nStatesgit中把檔案的狀態分成三個states\n\nmodified working directory\nstaged staging area\ncommited git directory\n\nmodified代表你對這個檔案做了改動，git會比較現在的內容跟原本內容，有改動的檔案就會被視為modified，變動後的檔案我們可以將它放進staging area，檔案會變成staged的狀態，通常這代表我們確認這部分的修改沒問題，但還沒結束，我們必須將staged的檔案commit，才會放入git directory中，也就是在tree裡面加入新的節點\n\n開發時的流程會是：\n\n修改完檔案後儲存，git偵測到檔案變動，將檔案視為modified\n將檔案放入staging area中 git add file\n將staged file commit git commit\n\ncommit的時候，git會要你寫入message讓你之後方便尋找\nBranch前面提過git像是一個tree，上面有很多的節點，既然是tree，當然應該要有分支，而在git中，我們可以在節點上開新的branch，代表我們可以在同樣的基礎下開發不同版本的code或是同時開發不同的功能。\n通常我們會有一個master branch，所以通常我們會在master上開分支進行開發，當開發完之後，我們可以把分支接回(merge)原本的master branch，merge之後的圖會像下面這樣\n12345678graph LR;A--&gt;B;B--&gt;C;C--&gt;D;D--&gt;E;B--&gt;F;F--&gt;E;E--&gt;G;\n要注意的是，開發過程中可能會有改了同樣的檔案，但是內容不相同的狀況，這時候要merge就會產生衝突(conflict)，發生conflict的時候merge會無法進行，merge的人必須要先把衝突解決才能merge\nDistributed有了git的基本概念，現在可以說一下git的應用狀況\n首先，git讓我們可以為自己的程式改動留下紀錄，同時開發不同的功能後結合在一起。git並不只是為了個人使用，它能夠讓開發者間可以同時開發。最重要的是，git是一套分散式的版本控制系統。\n早期的版本控制系統是集中式的，集中式的特色是開發者間的檔案是同步的，也就是當某個人做改動時，其他人的檔案也會有更動，但這也代表我們必須保持在連接網路的狀態才能同步，也就是當我們寫完一部份想要commit的時候會卡住，沒辦法進行接下來的開發。\n分散式的好處在於，每個人都有一份自己的檔案庫，代表你不用連網也可以發出commit，任意的修改你local端的程式，我們需要的只是一個雲端的檔案庫，大家都可以從這邊複製(clone)一份下來，然後進行開發，開發完之後我們可以push上雲端讓大家使用，也可以pull下來更新自己local的檔案庫。\n分散式讓我們可以不被綁在需要聯網同步檔案庫的困境，我們只要clone之後開始開發，然後透過pull跟push共享彼此的開發成果。\n總結git讓開發者可以方便的共享檔案庫，更有效率地做開發，下一篇再來講git實際使用的方式","dateCreated":"2018-10-19T16:58:23+08:00","dateModified":"2018-10-19T16:58:52+08:00","datePublished":"2018-10-19T16:58:23+08:00","description":"RE:從零開始的git 概念篇前言相信大家都有過類似的經驗\n\ncode修改後覺得本來的版本比較好\n共同開發後要把內容整理起來\n想知道自己之前程式裡的邏輯跟現在的差別\n\n因為以上總總的問題，產生了版本控制這個概念，我們可以靠著版本控制去追code的變化，目前最多人使用的就是git","headline":"","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"/note.musingfox.me/2018/10/19/git-ep1-concept/"},"publisher":{"@type":"Organization","name":"Nick Huang(musingfox)","sameAs":["https://github.com/musingfox","https://www.linkedin.com/profile/"],"image":"https://www.gravatar.com/avatar/2fe867b1e6bcb804064f4cadb7f84c99","logo":{"@type":"ImageObject","url":"https://www.gravatar.com/avatar/2fe867b1e6bcb804064f4cadb7f84c99"}},"url":"/note.musingfox.me/2018/10/19/git-ep1-concept/"}</script>
+    <meta name="description" content="RE:從零開始的git 概念篇前言相信大家都有過類似的經驗  code修改後覺得本來的版本比較好 共同開發後要把內容整理起來 想知道自己之前程式裡的邏輯跟現在的差別  因為以上總總的問題，產生了版本控制這個概念，我們可以靠著版本控制去追code的變化，目前最多人使用的就是git">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Musingfox Note">
+<meta property="og:url" content="note.musingfox.me/2018/10/19/git-ep1-concept/index.html">
+<meta property="og:site_name" content="Musingfox Note">
+<meta property="og:description" content="RE:從零開始的git 概念篇前言相信大家都有過類似的經驗  code修改後覺得本來的版本比較好 共同開發後要把內容整理起來 想知道自己之前程式裡的邏輯跟現在的差別  因為以上總總的問題，產生了版本控制這個概念，我們可以靠著版本控制去追code的變化，目前最多人使用的就是git">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://git-scm.com/book/en/v2/images/areas.png">
+<meta property="og:updated_time" content="2018-10-19T08:58:52.319Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Musingfox Note">
+<meta name="twitter:description" content="RE:從零開始的git 概念篇前言相信大家都有過類似的經驗  code修改後覺得本來的版本比較好 共同開發後要把內容整理起來 想知道自己之前程式裡的邏輯跟現在的差別  因為以上總總的問題，產生了版本控制這個概念，我們可以靠著版本控制去追code的變化，目前最多人使用的就是git">
+<meta name="twitter:image" content="https://git-scm.com/book/en/v2/images/areas.png">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-1udptkpril81ozu8ifd8zpujn7ipu7lefxsiu5gxx0dpnzntdx6dusvki3ao.min.css">
+    <!--STYLES END-->
+    
+
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="5">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">Musingfox Note</a>
+    </div>
+    
+        
+            <a  class="header-right-picture "
+                href="#about">
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="5">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                            title="首頁"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首頁</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-categories"
+                            
+                            title="分類"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分類</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                            title="標籤"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">標籤</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                            title="所有文章"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">所有文章</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link open-algolia-search"
+                             href="#search"
+                            
+                            title="搜尋"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">搜尋</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="#about"
+                            
+                            title="關於"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-user" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">關於</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://github.com/musingfox" target="_blank" rel="noopener" title="github">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">github</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://www.linkedin.com/profile/" target="_blank" rel="noopener" title="linkedin">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">linkedin</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="5"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            (無標題)
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2018-10-19T16:58:23+08:00">
+	
+		    10月 19, 2018
+    	
+    </time>
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <!-- excerpt -->
+<p>首先先解釋git的概念</p>
+<h2 id="Tree"><a href="#Tree" class="headerlink" title="Tree"></a>Tree</h2><p>git把code的變化以類似tree的方式呈現，每當我們要產生新的紀錄時，就會在tree上面加上新的節點(commit)，也可以在節點上開分支(branch)</p>
+<p>示意圖：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">graph LR;</span><br><span class="line"></span><br><span class="line">A--&gt;B;</span><br><span class="line">B--&gt;C;</span><br><span class="line">B--&gt;F;</span><br><span class="line">C--&gt;D;</span><br><span class="line">D--&gt;E;</span><br></pre></td></tr></table></figure>
+<p>每個節點都是一個commit，可以看到B點的時候產生了兩個分支，分支之間可以彼此切換，後面還會再提到分支之間的互動，接下來要說的是git怎麼紀錄檔案變化</p>
+<h2 id="States"><a href="#States" class="headerlink" title="States"></a>States</h2><p>git中把檔案的狀態分成三個states</p>
+<ul>
+<li>modified <em>working directory</em></li>
+<li>staged <em>staging area</em></li>
+<li>commited <em>git directory</em></li>
+</ul>
+<p>modified代表你對這個檔案做了改動，git會比較現在的內容跟原本內容，有改動的檔案就會被視為modified，變動後的檔案我們可以將它放進staging area，檔案會變成staged的狀態，通常這代表我們確認這部分的修改沒問題，但還沒結束，我們必須將staged的檔案commit，才會放入git directory中，也就是在tree裡面加入新的節點</p>
+<p><img src="https://git-scm.com/book/en/v2/images/areas.png" alt="Working tree, staging area, and Git directory."></p>
+<p>開發時的流程會是：</p>
+<ol>
+<li>修改完檔案後儲存，git偵測到檔案變動，將檔案視為modified</li>
+<li>將檔案放入staging area中 <code>git add file</code></li>
+<li>將staged file commit <code>git commit</code></li>
+</ol>
+<p>commit的時候，git會要你寫入message讓你之後方便尋找</p>
+<h2 id="Branch"><a href="#Branch" class="headerlink" title="Branch"></a>Branch</h2><p>前面提過git像是一個tree，上面有很多的節點，既然是tree，當然應該要有分支，而在git中，我們可以在節點上開新的branch，代表我們可以在同樣的基礎下開發不同版本的code或是同時開發不同的功能。</p>
+<p>通常我們會有一個master branch，所以通常我們會在master上開分支進行開發，當開發完之後，我們可以把分支接回(merge)原本的master branch，merge之後的圖會像下面這樣</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">graph LR;</span><br><span class="line">A--&gt;B;</span><br><span class="line">B--&gt;C;</span><br><span class="line">C--&gt;D;</span><br><span class="line">D--&gt;E;</span><br><span class="line">B--&gt;F;</span><br><span class="line">F--&gt;E;</span><br><span class="line">E--&gt;G;</span><br></pre></td></tr></table></figure>
+<p>要注意的是，開發過程中可能會有改了同樣的檔案，但是內容不相同的狀況，這時候要merge就會產生衝突(conflict)，發生conflict的時候merge會無法進行，merge的人必須要先把衝突解決才能merge</p>
+<h2 id="Distributed"><a href="#Distributed" class="headerlink" title="Distributed"></a>Distributed</h2><p>有了git的基本概念，現在可以說一下git的應用狀況</p>
+<p>首先，git讓我們可以為自己的程式改動留下紀錄，同時開發不同的功能後結合在一起。git並不只是為了個人使用，它能夠讓開發者間可以同時開發。最重要的是，git是一套<strong>分散式的版本控制系統</strong>。</p>
+<p>早期的版本控制系統是集中式的，集中式的特色是開發者間的檔案是同步的，也就是當某個人做改動時，其他人的檔案也會有更動，但這也代表我們必須保持在連接網路的狀態才能同步，也就是當我們寫完一部份想要commit的時候會卡住，沒辦法進行接下來的開發。</p>
+<p>分散式的好處在於，每個人都有一份自己的檔案庫，代表你不用連網也可以發出commit，任意的修改你local端的程式，我們需要的只是一個雲端的檔案庫，大家都可以從這邊複製(clone)一份下來，然後進行開發，開發完之後我們可以push上雲端讓大家使用，也可以pull下來更新自己local的檔案庫。</p>
+<p>分散式讓我們可以不被綁在需要聯網同步檔案庫的困境，我們只要clone之後開始開發，然後透過pull跟push共享彼此的開發成果。</p>
+<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><p>git讓開發者可以方便的共享檔案庫，更有效率地做開發，下一篇再來講git實際使用的方式</p>
+            
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2018/07/19/how-to-build-a-hexo-blog/" data-tooltip="打造一個hexo blog" aria-label="下一篇: 打造一個hexo blog">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Diesen Beitrag teilen">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=note.musingfox.me/2018/10/19/git-ep1-concept/" title="分享到 Facebook">
+                    <i class="fa fa-facebook-official" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=note.musingfox.me/2018/10/19/git-ep1-concept/" title="分享到 Twitter">
+                    <i class="fa fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=note.musingfox.me/2018/10/19/git-ep1-concept/" title="分享到 Google+">
+                    <i class="fa fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a class="post-action-btn btn btn--default" href="#gitment">
+                         <i class="fa fa-comment-o"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <div id="gitment"></div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2018 Nick Huang(musingfox). All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2018/07/19/how-to-build-a-hexo-blog/" data-tooltip="打造一個hexo blog" aria-label="下一篇: 打造一個hexo blog">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Diesen Beitrag teilen">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=note.musingfox.me/2018/10/19/git-ep1-concept/" title="分享到 Facebook">
+                    <i class="fa fa-facebook-official" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=note.musingfox.me/2018/10/19/git-ep1-concept/" title="分享到 Twitter">
+                    <i class="fa fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=note.musingfox.me/2018/10/19/git-ep1-concept/" title="分享到 Google+">
+                    <i class="fa fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a class="post-action-btn btn btn--default" href="#gitment">
+                         <i class="fa fa-comment-o"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+    <i id="btn-close-shareoptions" class="fa fa-close"></i>
+    <ul class="share-options">
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=note.musingfox.me/2018/10/19/git-ep1-concept/">
+                    <i class="fa fa-facebook-official" aria-hidden="true"></i><span>分享到 Facebook</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=note.musingfox.me/2018/10/19/git-ep1-concept/">
+                    <i class="fa fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=note.musingfox.me/2018/10/19/git-ep1-concept/">
+                    <i class="fa fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <h4 id="about-card-name">Nick Huang(musingfox)</h4>
+        
+            <div id="about-card-bio"><p>交大資工106級資工組畢業<br>目前是小小後端同時四處摸索<br>php/javascript/python 正在學go<br><a href='https://blog.musingfox.me'>這是我的生活日常<a/></p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>後端工程師</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br/>
+                Taipei/Taiwan
+            </div>
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-yhuo2grt8r7qkqumzgjoglkfbicl1thukjgmla6jopu56zpcowfedi5zjcor.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script type="text/javascript">
+            (function() {
+                function render() {
+                    new Gitment({
+                        id: 'note.musingfox.me/2018/10/19/git-ep1-concept/',
+                        owner: 'musingfox',
+                        repo: 'https://github.com/musingfox/musingfox.github.io',
+                        oauth: {
+                            client_id: 'cd55fef5e85a08fb49da',
+                            client_secret: '5a6f07ad8c1e1a8d2074df43feab2fd5c3d4bebc',
+                        }
+                    }).render('gitment');
+                }
+                var gc = document.createElement('script');
+                gc.type = 'text/javascript';
+                gc.src = '//imsun.github.io/gitment/dist/gitment.browser.js';
+                gc.charset = 'UTF-8';
+                gc.onload = render;
+                gc.async = true;
+                document.querySelector('body').appendChild(gc);
+                var gcs = document.createElement('link');
+                gcs.href = '//imsun.github.io/gitment/style/default.css';
+                gcs.type = 'text/css';
+                gcs.rel = 'stylesheet';
+                gcs.media = 'screen,print';
+                document.querySelector('head').appendChild(gcs);
+            })();
+	    </script>
+    
+
+
+
+    </body>
+</html>
