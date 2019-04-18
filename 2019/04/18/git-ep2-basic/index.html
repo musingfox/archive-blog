@@ -1,0 +1,540 @@
+
+<!DOCTYPE html>
+<html lang="zh-tw">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Musingfox Note">
+    <title>RE:從零開始的git 基礎篇 - Musingfox Note</title>
+    <meta name="author" content="Nick Huang(musingfox)">
+    
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Nick Huang(musingfox)","sameAs":["https://github.com/musingfox","https://www.linkedin.com/profile/"],"image":"https://www.gravatar.com/avatar/2fe867b1e6bcb804064f4cadb7f84c99"},"articleBody":"\n從頭開始一個git repository首先，必須先建立一個資料夾\n123mkdir my-projectcd my-projectgit init\n當你輸入git init的時候，就會在這個資料夾中加入一個.git的隱藏資料夾，跟git相關的內容都在裡面，如果你把.git刪掉等於刪掉了追蹤這個repository的一切！\n複製現有的repository我們知道git是分散式的版本控制，通常我們會有一個主要的repo，通常會放在github, gitlab, bitbucket上，大家各自複製一份到自己的local端進行開發\n1git clone target-repo-link\n執行clone之後就會有個新的資料夾，裡面包含著完整的repo\n開始之前先不要急著開始寫code，git config -l會列出目前git的設定，git可以設定通用的設定或是根據repo做設定，通常我們不太需要做改動，你也可以自己做些調整。\nconfig123git config -l // 列出設定git config -e // 透過編輯器修改設定git config &lt;name&gt; &lt;value&gt; //將&lt;name&gt;設定為&lt;value&gt;\n通常安裝好git之後，會需要先設定幾個基本內容\n123git config user.name John Doegit config user.email john.doe@gmail.comgit config editor vim //非必要，把預設編輯器改成vim\n先設定好你的名字跟信箱，這樣之後寫commit的時候才知道是誰寫的\n寫些東西之後當你寫了一些東西之後，git會發現這個資料夾中有他沒有追蹤到的內容，我們可以git add newfile來把修改的內容加入staging area，如果你修改了很多檔案也可以用git add .一次加入所有修改的檔案\n你也可以用git diff來檢查現在的檔案跟先前commit的差別\n當你做完一定程度的修改的時候，就可以把現在的內容存成一個commit，輸入git commit就會跳到vi的編輯頁面，這邊可以輸入你在這個commit做了什麼事情，下面會有一些git預先做好的內容，基本上是顯示你這個commit新增、修改、刪除了哪些內容。當你輸入完這個commit的commit message之後，就建立了一個新的commit了\n你可以用git log看到先前commit的紀錄，包括時間、commit message、誰發的commit、發到哪個branch，還會有每個commit獨一無二的一串編號用來辨識。\n複習一下\n12345git add file // 將file放入追蹤git add . // 將所有修改過的內容放入追蹤git commit // 跳到編輯頁面，輸入commit message，完成這個commitgit log // 看到過往的commit紀錄git log --graph //讓commit紀錄以圖像方式呈現\n關於branch上篇提過git很重要的branch，通常每個repo都會有最基本的master branch，如果我們今天想開發新功能的時候，可以用git branch newFeature開一個新的branch，然後輸入git branch可以看到目前有哪些branch，注意這個時候你還是在原本的branch，想要切換不同的branch需要再使用git checkout newFeature來切換\n如果某個feature開發完成，我們要再把他的branch merge回去，這樣就可以把新開發的feature接回去原本的branch了，注意merge的時候要先切到你要的branch，然後指定你開發的feature branch\n123git branch newBranchgit checkout newBranchgit merge featureBranch\n當你要切換branch的時候不能有任何正在修改的檔案，你必須把目前的修改刪掉、寫入commit、或是暫存起來\n暫存？當你開發到一半的時候，可能會因為某些原因想要還原目前的修改，這時候我們可以用git stash先把目前的修改封存起來。如果你開發到一半想要切換branch時，可以先把目前的修改stash，之後再pop或是apply，stash的修改不只可以用在你當時修改的branch，也可以在其他branch上應用\n1234git stash // 將修改暫存git stash list // 列出目前有的修改git stash pop // 使用最近的stash並從stash中移除git stash apply // 使用最近的stash\nstash是一個stack，所以當你用pop或是apply時都是用最近的存入的暫存，你也可以用--index來指定要使用的暫存\n我寫完了，然後呢？git最重要的是輕鬆的跟別人共同開發，所以寫完之後我們要把自己的修改推出去給別人，首先我們要先設定我們的remote repo，如果你是clone下來的，那會先預設你的remote就是clone的來源(預設叫origin)，當然你也可以自己修改\n123git remote -v // 列出目前的remotegit remote add name url // 新增remote repogit remote rm name // 移除名稱為name的remote\n然後我們就可以發出我們的commit了！\n1git push &lt;remote&gt; // 向remote推上新的commit，預設remote是origin\n這樣就可以把我們的修改推上去指定的remote repo，當然push之前git會先確定你有權限改動這個repo以及remote repo跟你local的差異，如果在你push之前已經有人push了，那麼git也會阻止你push，因為你們的tree長得不一樣\n既然我們可以把修改push上去，那更新repo當然就是pull，另外還有一個功能叫rebase，這是在上面遇到有人在你之前更新repo的時候很好用的方法，rebase可以找到你跟remote repo共同的commit，然後把remote上新的commit拉下來之後，再把你的commit接上去，這樣就不會有tree不同而不能push的狀況了\n12git pull &lt;remote&gt; // 從remote更新，預設remote是origingit rebase &lt;branch&gt; // 把remote上新的commit拉下來之後接上自己修改的commit\nrebase也能對其他branch使用，例如你在A branch的a commit上開了一個branch，但後面的b commit有你需要的內容，這時候就可以用rebase讓你的branch從b commit開始\n衝突有時候(rebase, merge)會遇到conflict，通常是兩個branch之間在同個地方做了不一樣的修改，因為git沒辦法確定怎樣才是對的，所以會進到一個conflict的狀態，你必須先把衝突的部分處理掉才能繼續原本的動作，衝突時通常會長這樣\n1234567&lt;======= A commit // 以下為A commit內容foo(a)bar(a)======== // 以下為B commit內容foo(a)doSomething(a)=======&gt; B commit\n這時候就必須自己檢查每個conflict，修改成你真正想要的狀況之後才能執行原本的動作\n技術總結以上是常用到的指令，下一篇再來介紹多人開發時的一些觀念，可能會再補充一些不常用但有幫助的指令以及一些好用的套件","dateCreated":"2019-04-18T11:23:42+08:00","dateModified":"2019-04-18T11:23:57+08:00","datePublished":"2019-04-18T11:23:42+08:00","description":"前言上篇講了git的好處跟git的基本概念，這篇來說git的常用操作","headline":"RE:從零開始的git 基礎篇","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"/note.musingfox.me/2019/04/18/git-ep2-basic/"},"publisher":{"@type":"Organization","name":"Nick Huang(musingfox)","sameAs":["https://github.com/musingfox","https://www.linkedin.com/profile/"],"image":"https://www.gravatar.com/avatar/2fe867b1e6bcb804064f4cadb7f84c99","logo":{"@type":"ImageObject","url":"https://www.gravatar.com/avatar/2fe867b1e6bcb804064f4cadb7f84c99"}},"url":"/note.musingfox.me/2019/04/18/git-ep2-basic/","keywords":"git, RD"}</script>
+    <meta name="description" content="前言上篇講了git的好處跟git的基本概念，這篇來說git的常用操作">
+<meta name="keywords" content="git,RD">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="RE:從零開始的git 基礎篇">
+<meta property="og:url" content="note.musingfox.me/2019/04/18/git-ep2-basic/index.html">
+<meta property="og:site_name" content="Musingfox Note">
+<meta property="og:description" content="前言上篇講了git的好處跟git的基本概念，這篇來說git的常用操作">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:updated_time" content="2019-04-18T03:23:57.602Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RE:從零開始的git 基礎篇">
+<meta name="twitter:description" content="前言上篇講了git的好處跟git的基本概念，這篇來說git的常用操作">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-1udptkpril81ozu8ifd8zpujn7ipu7lefxsiu5gxx0dpnzntdx6dusvki3ao.min.css">
+    <!--STYLES END-->
+    
+
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="5">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">Musingfox Note</a>
+    </div>
+    
+        
+            <a  class="header-right-picture "
+                href="#about">
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="5">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                            title="首頁"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首頁</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-categories"
+                            
+                            title="分類"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分類</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                            title="標籤"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">標籤</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                            title="所有文章"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">所有文章</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link open-algolia-search"
+                             href="#search"
+                            
+                            title="搜尋"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">搜尋</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="#about"
+                            
+                            title="關於"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-user" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">關於</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://github.com/musingfox" target="_blank" rel="noopener" title="github">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">github</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://www.linkedin.com/profile/" target="_blank" rel="noopener" title="linkedin">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">linkedin</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="5"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            RE:從零開始的git 基礎篇
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2019-04-18T11:23:42+08:00">
+	
+		    4月 18, 2019
+    	
+    </time>
+    
+        <span>分類 </span>
+        
+    <a class="category-link" href="/categories/tool/">tool</a>, <a class="category-link" href="/categories/tool/git/">git</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <!-- excerpt -->
+<h3 id="從頭開始一個git-repository"><a href="#從頭開始一個git-repository" class="headerlink" title="從頭開始一個git repository"></a>從頭開始一個git repository</h3><p>首先，必須先建立一個資料夾</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir my-project</span><br><span class="line"><span class="built_in">cd</span> my-project</span><br><span class="line">git init</span><br></pre></td></tr></table></figure>
+<p>當你輸入<code>git init</code>的時候，就會在這個資料夾中加入一個.git的隱藏資料夾，跟git相關的內容都在裡面，如果你把.git刪掉等於刪掉了追蹤這個repository的一切！</p>
+<h3 id="複製現有的repository"><a href="#複製現有的repository" class="headerlink" title="複製現有的repository"></a>複製現有的repository</h3><p>我們知道git是分散式的版本控制，通常我們會有一個主要的repo，通常會放在github, gitlab, bitbucket上，大家各自複製一份到自己的local端進行開發</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone target-repo-link</span><br></pre></td></tr></table></figure>
+<p>執行clone之後就會有個新的資料夾，裡面包含著完整的repo</p>
+<h3 id="開始之前"><a href="#開始之前" class="headerlink" title="開始之前"></a>開始之前</h3><p>先不要急著開始寫code，<code>git config -l</code>會列出目前git的設定，git可以設定通用的設定或是根據repo做設定，通常我們不太需要做改動，你也可以自己做些調整。</p>
+<figure class="highlight plain"><figcaption><span>config</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git config -l // 列出設定</span><br><span class="line">git config -e // 透過編輯器修改設定</span><br><span class="line">git config &lt;name&gt; &lt;value&gt; //將&lt;name&gt;設定為&lt;value&gt;</span><br></pre></td></tr></table></figure>
+<p>通常安裝好git之後，會需要先設定幾個基本內容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git config user.name John Doe</span><br><span class="line">git config user.email john.doe@gmail.com</span><br><span class="line">git config editor vim //非必要，把預設編輯器改成vim</span><br></pre></td></tr></table></figure>
+<p>先設定好你的名字跟信箱，這樣之後寫commit的時候才知道是誰寫的</p>
+<h3 id="寫些東西之後"><a href="#寫些東西之後" class="headerlink" title="寫些東西之後"></a>寫些東西之後</h3><p>當你寫了一些東西之後，git會發現這個資料夾中有他沒有追蹤到的內容，我們可以<code>git add newfile</code>來把修改的內容加入staging area，如果你修改了很多檔案也可以用<code>git add .</code>一次加入所有修改的檔案</p>
+<p>你也可以用<code>git diff</code>來檢查現在的檔案跟先前commit的差別</p>
+<p>當你做完一定程度的修改的時候，就可以把現在的內容存成一個commit，輸入<code>git commit</code>就會跳到vi的編輯頁面，這邊可以輸入你在這個commit做了什麼事情，下面會有一些git預先做好的內容，基本上是顯示你這個commit新增、修改、刪除了哪些內容。當你輸入完這個commit的commit message之後，就建立了一個新的commit了</p>
+<p>你可以用<code>git log</code>看到先前commit的紀錄，包括時間、commit message、誰發的commit、發到哪個branch，還會有每個commit獨一無二的一串編號用來辨識。</p>
+<p>複習一下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git add file // 將file放入追蹤</span><br><span class="line">git add . // 將所有修改過的內容放入追蹤</span><br><span class="line">git commit // 跳到編輯頁面，輸入commit message，完成這個commit</span><br><span class="line">git log // 看到過往的commit紀錄</span><br><span class="line">git log --graph //讓commit紀錄以圖像方式呈現</span><br></pre></td></tr></table></figure>
+<h3 id="關於branch"><a href="#關於branch" class="headerlink" title="關於branch"></a>關於branch</h3><p>上篇提過git很重要的branch，通常每個repo都會有最基本的master branch，如果我們今天想開發新功能的時候，可以用<code>git branch newFeature</code>開一個新的branch，然後輸入<code>git branch</code>可以看到目前有哪些branch，注意這個時候你還是在原本的branch，想要切換不同的branch需要再使用<code>git checkout newFeature</code>來切換</p>
+<p>如果某個feature開發完成，我們要再把他的branch merge回去，這樣就可以把新開發的feature接回去原本的branch了，注意merge的時候要先切到你要的branch，然後指定你開發的feature branch</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git branch newBranch</span><br><span class="line">git checkout newBranch</span><br><span class="line">git merge featureBranch</span><br></pre></td></tr></table></figure>
+<p>當你要切換branch的時候不能有任何正在修改的檔案，你必須把目前的修改刪掉、寫入commit、或是暫存起來</p>
+<h3 id="暫存？"><a href="#暫存？" class="headerlink" title="暫存？"></a>暫存？</h3><p>當你開發到一半的時候，可能會因為某些原因想要還原目前的修改，這時候我們可以用<code>git stash</code>先把目前的修改封存起來。如果你開發到一半想要切換branch時，可以先把目前的修改stash，之後再pop或是apply，stash的修改不只可以用在你當時修改的branch，也可以在其他branch上應用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git stash // 將修改暫存</span><br><span class="line">git stash list // 列出目前有的修改</span><br><span class="line">git stash pop // 使用最近的stash並從stash中移除</span><br><span class="line">git stash apply // 使用最近的stash</span><br></pre></td></tr></table></figure>
+<p>stash是一個stack，所以當你用pop或是apply時都是用最近的存入的暫存，你也可以用<code>--index</code>來指定要使用的暫存</p>
+<h3 id="我寫完了，然後呢？"><a href="#我寫完了，然後呢？" class="headerlink" title="我寫完了，然後呢？"></a>我寫完了，然後呢？</h3><p>git最重要的是輕鬆的跟別人共同開發，所以寫完之後我們要把自己的修改推出去給別人，首先我們要先設定我們的remote repo，如果你是clone下來的，那會先預設你的remote就是clone的來源(預設叫origin)，當然你也可以自己修改</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git remote -v // 列出目前的remote</span><br><span class="line">git remote add name url // 新增remote repo</span><br><span class="line">git remote rm name // 移除名稱為name的remote</span><br></pre></td></tr></table></figure>
+<p>然後我們就可以發出我們的commit了！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push &lt;remote&gt; // 向remote推上新的commit，預設remote是origin</span><br></pre></td></tr></table></figure>
+<p>這樣就可以把我們的修改推上去指定的remote repo，當然push之前git會先確定你有權限改動這個repo以及remote repo跟你local的差異，如果在你push之前已經有人push了，那麼git也會阻止你push，因為你們的tree長得不一樣</p>
+<p>既然我們可以把修改push上去，那更新repo當然就是pull，另外還有一個功能叫rebase，這是在上面遇到有人在你之前更新repo的時候很好用的方法，rebase可以找到你跟remote repo共同的commit，然後把remote上新的commit拉下來之後，再把你的commit接上去，這樣就不會有tree不同而不能push的狀況了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git pull &lt;remote&gt; // 從remote更新，預設remote是origin</span><br><span class="line">git rebase &lt;branch&gt; // 把remote上新的commit拉下來之後接上自己修改的commit</span><br></pre></td></tr></table></figure>
+<p>rebase也能對其他branch使用，例如你在A branch的a commit上開了一個branch，但後面的b commit有你需要的內容，這時候就可以用rebase讓你的branch從b commit開始</p>
+<h3 id="衝突"><a href="#衝突" class="headerlink" title="衝突"></a>衝突</h3><p>有時候(rebase, merge)會遇到conflict，通常是兩個branch之間在同個地方做了不一樣的修改，因為git沒辦法確定怎樣才是對的，所以會進到一個conflict的狀態，你必須先把衝突的部分處理掉才能繼續原本的動作，衝突時通常會長這樣</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;======= A commit // 以下為A commit內容</span><br><span class="line">foo(a)</span><br><span class="line">bar(a)</span><br><span class="line">======== // 以下為B commit內容</span><br><span class="line">foo(a)</span><br><span class="line">doSomething(a)</span><br><span class="line">=======&gt; B commit</span><br></pre></td></tr></table></figure>
+<p>這時候就必須自己檢查每個conflict，修改成你真正想要的狀況之後才能執行原本的動作</p>
+<h3 id="技術總結"><a href="#技術總結" class="headerlink" title="技術總結"></a>技術總結</h3><p>以上是常用到的指令，下一篇再來介紹多人開發時的一些觀念，可能會再補充一些不常用但有幫助的指令以及一些好用的套件</p>
+            
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">標籤</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/RD/">RD</a> <a class="tag tag--primary tag--small t-link" href="/tags/git/">git</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2019/04/18/git-ep1-concept/" data-tooltip="RE:從零開始的git 概念篇" aria-label="下一篇: RE:從零開始的git 概念篇">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=note.musingfox.me/2019/04/18/git-ep2-basic/" title="分享到 Facebook">
+                    <i class="fa fa-facebook-official" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=note.musingfox.me/2019/04/18/git-ep2-basic/" title="分享到 Twitter">
+                    <i class="fa fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=note.musingfox.me/2019/04/18/git-ep2-basic/" title="分享到 Google+">
+                    <i class="fa fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a class="post-action-btn btn btn--default" href="#gitment">
+                         <i class="fa fa-comment-o"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <div id="gitment"></div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2019 Nick Huang(musingfox). All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2019/04/18/git-ep1-concept/" data-tooltip="RE:從零開始的git 概念篇" aria-label="下一篇: RE:從零開始的git 概念篇">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=note.musingfox.me/2019/04/18/git-ep2-basic/" title="分享到 Facebook">
+                    <i class="fa fa-facebook-official" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=note.musingfox.me/2019/04/18/git-ep2-basic/" title="分享到 Twitter">
+                    <i class="fa fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=note.musingfox.me/2019/04/18/git-ep2-basic/" title="分享到 Google+">
+                    <i class="fa fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a class="post-action-btn btn btn--default" href="#gitment">
+                         <i class="fa fa-comment-o"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+    <i id="btn-close-shareoptions" class="fa fa-close"></i>
+    <ul class="share-options">
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=note.musingfox.me/2019/04/18/git-ep2-basic/">
+                    <i class="fa fa-facebook-official" aria-hidden="true"></i><span>分享到 Facebook</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=note.musingfox.me/2019/04/18/git-ep2-basic/">
+                    <i class="fa fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=note.musingfox.me/2019/04/18/git-ep2-basic/">
+                    <i class="fa fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <h4 id="about-card-name">Nick Huang(musingfox)</h4>
+        
+            <div id="about-card-bio"><p>交大資工106級資工組畢業<br>目前是小小後端同時四處摸索<br>php/javascript/python 正在學go<br><a href='https://blog.musingfox.me'>這是我的生活日常<a/></p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>後端工程師</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br/>
+                Taipei/Taiwan
+            </div>
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-yhuo2grt8r7qkqumzgjoglkfbicl1thukjgmla6jopu56zpcowfedi5zjcor.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script type="text/javascript">
+            (function() {
+                function render() {
+                    new Gitment({
+                        id: 'note.musingfox.me/2019/04/18/git-ep2-basic/',
+                        owner: 'musingfox',
+                        repo: 'https://github.com/musingfox/musingfox.github.io',
+                        oauth: {
+                            client_id: 'cd55fef5e85a08fb49da',
+                            client_secret: '5a6f07ad8c1e1a8d2074df43feab2fd5c3d4bebc',
+                        }
+                    }).render('gitment');
+                }
+                var gc = document.createElement('script');
+                gc.type = 'text/javascript';
+                gc.src = '//imsun.github.io/gitment/dist/gitment.browser.js';
+                gc.charset = 'UTF-8';
+                gc.onload = render;
+                gc.async = true;
+                document.querySelector('body').appendChild(gc);
+                var gcs = document.createElement('link');
+                gcs.href = '//imsun.github.io/gitment/style/default.css';
+                gcs.type = 'text/css';
+                gcs.rel = 'stylesheet';
+                gcs.media = 'screen,print';
+                document.querySelector('head').appendChild(gcs);
+            })();
+	    </script>
+    
+
+
+
+    </body>
+</html>
